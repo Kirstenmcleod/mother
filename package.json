@@ -1,0 +1,16 @@
+{
+  "name": "mother",
+  "version": "1.0.0",
+  "description": "itm najor project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kirsten N. McLeod",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "path": "^0.12.7",
+    "save": "^2.9.0"
+  }
+}

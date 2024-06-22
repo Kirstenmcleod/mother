@@ -1,0 +1,26 @@
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    display: flex;
+  }
+  .fixed-tile {
+    width: 200px; /* Adjust width as needed */
+    height: 100%; /* Takes full height of the viewport */
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: #f0f0f0;
+    border-right: 1px solid #ccc;
+    overflow-y: auto; /* Enable scrolling if content exceeds height */
+  }
+  .content {
+    margin-left: 200px; /* Should match fixed-tile width */
+    padding: 20px;
+  }
+  /* Just for styling content area */
+  .content p {
+    margin-bottom: 15px;
+  }
