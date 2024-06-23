@@ -11,6 +11,7 @@
   "author": "Andrew McLeod",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "google-auth-library": "^9.11.0",
     "google-spreadsheet": "^4.1.2",

@@ -1,12 +1,13 @@
-const creds = require('../creds.json')
 const sheetId = '1Lo8wa8zJ0Qpv31CoouV3_w3qLnlkuFK7MxgYqHvBf9U';
 const { GoogleSpreadsheet } = require('google-spreadsheet')
 const { JWT } = require('google-auth-library');
 
+require('dotenv').config();
+
 exports.get = async function(req, res) {
     const serviceAccountAuth = new JWT({
-        email: creds.client_email,
-        key: creds.private_key,
+        email: process.env.client_email,
+        key: process.env.private_key,
         scopes: ["https://www.googleapis.com/auth/spreadsheets"],
         });
 

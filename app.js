@@ -4,6 +4,8 @@ const port = 3000
 const path = require('path')
 const locations = require('./ajax/locations')
 
+// Developer environment settings
+require('dotenv').config();
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname,`/public/index.html`));
