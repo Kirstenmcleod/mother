@@ -1,16 +1,22 @@
 {
   "name": "mother",
   "version": "1.0.0",
-  "description": "itm najor project",
-  "main": "index.js",
+  "description": "Major project",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./bin/www",
+    "watch": "nodemon --ext *"
   },
-  "author": "Kirsten N. McLeod",
+  "author": "Andrew McLeod",
   "license": "ISC",
   "dependencies": {
     "express": "^4.19.2",
-    "path": "^0.12.7",
-    "save": "^2.9.0"
+    "google-auth-library": "^9.11.0",
+    "google-spreadsheet": "^4.1.2",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
   }
 }
