@@ -1,13 +1,12 @@
+const creds = require('../creds.json')
 const sheetId = '1Lo8wa8zJ0Qpv31CoouV3_w3qLnlkuFK7MxgYqHvBf9U';
 const { GoogleSpreadsheet } = require('google-spreadsheet')
 const { JWT } = require('google-auth-library');
 
-require('dotenv').config();
-
 exports.get = async function(req, res) {
     const serviceAccountAuth = new JWT({
-        email: process.env.client_email,
-        key: process.env.private_key,
+        email: creds.client_email,
+        key: creds.private_key,
         scopes: ["https://www.googleapis.com/auth/spreadsheets"],
         });
 
@@ -23,11 +22,11 @@ exports.get = async function(req, res) {
         const sheet = doc.sheetsByIndex[0]; // Access the first sheet
         let rows = await sheet.getRows();
         let headerProps = rows[0]._worksheet._headerValues;
-        
+
         for (var i = 0; i < rows.length; i++) {
             let JSONrow = {}
             for (var p = 0; p < headerProps.length; p++) {
-                
+
                 JSONrow[headerProps[p]] = rows[i]._rawData[p];
             }
             JSONrows.push(JSONrow);
@@ -38,4 +37,5 @@ exports.get = async function(req, res) {
         console.error("Failed read data from the locations sheet:", error);
         res.status(500).send();
     }
+
 };

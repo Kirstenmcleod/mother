@@ -1,0 +1,16 @@
+.aws-sam
+serverless
+.serverless
+.dynamodb
+.env
+.env.production
+node_modules
+creds.json
+.DS_Store
+.vscode
+.elasticbeanstalk
+!.elasticbeanstalk.cfg.yml
+!.elasticbeanstalk.global.yml
+package-lock.json
+.vscode
+cert
