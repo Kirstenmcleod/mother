@@ -6,18 +6,12 @@
 <link rel="stylesheet" href="/public/styles.css">
 <script src="/public/script.js"></script>
 <title>Fixed Tile Example</title>
+
 </head>
 <body>
   <div class="container">
     <div class="fixed-tile">
-      <!-- Fixed tile content -->
-      <h2>Fixed Tile</h2>
-      <ul>
-        <li><a href="#">Link 1</a></li>
-        <li><a href="#">Link 2</a></li>
-        <li><a href="#">Link 3</a></li>
-        <!-- Add more content as needed -->
-      </ul>
+      <div id="map" class="" uk-sticky="end: true"></div>
     </div>
     <div class="content">
       <!-- Main content that scrolls -->
@@ -27,5 +21,225 @@
       <!-- Add more content as needed -->
     </div>
   </div>
+
+  <script>
+    async function initMap() {
+        const { Map } = await google.maps.importLibrary("maps");
+        const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+        // Create a new StyledMapType object, passing it an array of styles,
+        // and the name to be displayed on the map type control.
+        const styledMapType = new google.maps.StyledMapType(
+            [
+            { elementType: "geometry", stylers: [{ color: "#ebe3cd" }] },
+            { elementType: "labels.text.fill", stylers: [{ color: "#523735" }] },
+            { elementType: "labels.text.stroke", stylers: [{ color: "#f5f1e6" }] },
+            {
+                featureType: "administrative",
+                elementType: "geometry.stroke",
+                stylers: [{ color: "#c9b2a6" }],
+            },
+            {
+                featureType: "administrative.land_parcel",
+                elementType: "geometry.stroke",
+                stylers: [{ color: "#dcd2be" }],
+            },
+            {
+                featureType: "administrative.land_parcel",
+                elementType: "labels.text.fill",
+                stylers: [{ color: "#ae9e90" }],
+            },
+            {
+                featureType: "landscape.natural",
+                elementType: "geometry",
+                stylers: [{ color: "#dfd2ae" }],
+            },
+            {
+                featureType: "poi",
+                elementType: "geometry",
+                stylers: [{ color: "#dfd2ae" }],
+            },
+            {
+                featureType: "poi",
+                elementType: "labels.text.fill",
+                stylers: [{ color: "#93817c" }],
+            },
+            {
+                featureType: "poi.park",
+                elementType: "geometry.fill",
+                stylers: [{ color: "#a5b076" }],
+            },
+            {
+                featureType: "poi.park",
+                elementType: "labels.text.fill",
+                stylers: [{ color: "#447530" }],
+            },
+            {
+                featureType: "road",
+                elementType: "geometry",
+                stylers: [{ color: "#f5f1e6" }],
+            },
+            {
+                featureType: "road.arterial",
+                elementType: "geometry",
+                stylers: [{ color: "#fdfcf8" }],
+            },
+            {
+                featureType: "road.highway",
+                elementType: "geometry",
+                stylers: [{ color: "#f8c967" }],
+            },
+            {
+                featureType: "road.highway",
+                elementType: "geometry.stroke",
+                stylers: [{ color: "#e9bc62" }],
+            },
+            {
+                featureType: "road.highway.controlled_access",
+                elementType: "geometry",
+                stylers: [{ color: "#e98d58" }],
+            },
+            {
+                featureType: "road.highway.controlled_access",
+                elementType: "geometry.stroke",
+                stylers: [{ color: "#db8555" }],
+            },
+            {
+                featureType: "road.local",
+                elementType: "labels.text.fill",
+                stylers: [{ color: "#806b63" }],
+            },
+            {
+                featureType: "transit.line",
+                elementType: "geometry",
+                stylers: [{ color: "#dfd2ae" }],
+            },
+            {
+                featureType: "transit.line",
+                elementType: "labels.text.fill",
+                stylers: [{ color: "#8f7d77" }],
+            },
+            {
+                featureType: "transit.line",
+                elementType: "labels.text.stroke",
+                stylers: [{ color: "#ebe3cd" }],
+            },
+            {
+                featureType: "transit.station",
+                elementType: "geometry",
+                stylers: [{ color: "#dfd2ae" }],
+            },
+            {
+                featureType: "water",
+                elementType: "geometry.fill",
+                stylers: [{ color: "#b9d3c2" }],
+            },
+            {
+                featureType: "water",
+                elementType: "labels.text.fill",
+                stylers: [{ color: "#92998d" }],
+            },
+            ],
+            { name: "Styled Map" },
+        );
+        
+        // Create a map object, and include the MapTypeId to add
+        // to the map type control.
+        const map = new google.maps.Map(document.getElementById("map"), {
+            mapId:"4f2e3e94d0863ec5",
+            center: { lat: -33.86, lng: 151.209 },
+            zoom: 9,
+            mapTypeControl: false,
+            mapTypeControlOptions: {},
+            scrollwheel: false,
+            scaleControl: false,
+            zoomControl: false,
+            fullscreenControl: false,
+            gestureHandling: 'none',
+            disableDoubleClickZoom: true,
+            draggable: false,
+            navigationControl: false,
+            streetViewControl: false,
+        });
+
+        //Associate the styled map with the MapTypeId and set it to display.
+        map.mapTypes.set("styled_map", styledMapType);
+        map.setMapTypeId("styled_map");
+
+        for (const property of properties) {
+            const AdvancedMarkerElement = new google.maps.marker.AdvancedMarkerElement({
+                map,
+                content: buildContent(property),
+                position: property.position,
+                title: property.description,
+            });
+
+            AdvancedMarkerElement.addListener("click", () => {
+                toggleHighlight(AdvancedMarkerElement, property);
+            });
+        }
+    }  
+
+    function toggleHighlight(markerView, property) {
+        if (markerView.content.classList.contains("highlight")) {
+            markerView.content.classList.remove("highlight");
+            markerView.zIndex = null;
+        } else {
+            markerView.content.classList.add("highlight");
+            markerView.zIndex = 1;
+        }
+    }
+
+    function buildContent(property) {
+        const content = document.createElement("div");
+
+        content.classList.add("property");
+        content.innerHTML = `
+            <div class="icon">
+                <i aria-hidden="true" class="fa fa-icon fa-${property.type}" title="${property.type}"></i>
+                <span class="fa-sr-only">${property.type}</span>
+            </div>
+            <div class="details">
+                <div class="price">${property.price}</div>
+                <div class="address">${property.address}</div>
+                <div class="features">
+                <div>
+                    <i aria-hidden="true" class="fa fa-bed fa-lg bed" title="bedroom"></i>
+                    <span class="fa-sr-only">bedroom</span>
+                    <span>${property.bed}</span>
+                </div>
+                <div>
+                    <i aria-hidden="true" class="fa fa-bath fa-lg bath" title="bathroom"></i>
+                    <span class="fa-sr-only">bathroom</span>
+                    <span>${property.bath}</span>
+                </div>
+                <div>
+                    <i aria-hidden="true" class="fa fa-ruler fa-lg size" title="size"></i>
+                    <span class="fa-sr-only">size</span>
+                    <span>${property.size} ft<sup>2</sup></span>
+                </div>
+                </div>
+            </div>
+            `;
+        return content;
+        }
+
+    const properties = [
+        {
+            address: "215 Emily St, MountainView, CA",
+            description: "Single family house with modern design",
+            price: "$ 3,889,000",
+            type: "home",
+            bed: 5,
+            bath: 4.5,
+            size: 300,
+            position: { lat: -33.86, lng: 151.209 },
+        }
+    ];
+
+    window.initMap = initMap;
+</script>
+<script defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7OPl1-G63Ca-7uAO3bEWj-3AcQ4E8QrI&callback=initMap">
+</script>
 </body>
 </html>
