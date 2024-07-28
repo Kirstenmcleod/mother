@@ -4,7 +4,7 @@ phases:
     runtime-versions:
       nodejs: 18
     commands:
-      - npm install --omit=dev
+      - npm install --omit=dev --legacy-peer-deps
       - aws cloudformation package --template-file template.yaml --s3-bucket $S3_BUCKET --output-template-file outputSamTemplate.yaml
 artifacts:
   type: zip
