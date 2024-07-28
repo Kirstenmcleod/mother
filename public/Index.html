@@ -1,225 +1,224 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="/public/styles.css">
-<script src="/public/script.js"></script>
-<title>mother</title>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/public/styles.css">
+        <script src="/public/script.js"></script>
+        <script src="https://use.fontawesome.com/releases/v6.2.0/js/all.js"></script>
+        <title>mother</title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="fixed-tile">
+                <div id="map" class="" uk-sticky="end: true"></div>
+            </div>
+            <div id="content" class="content">
+                
+            </div>
+        </div>
 
-</head>
-<body>
-  <div class="container">
-    <div class="fixed-tile">
-      <div id="map" class="" uk-sticky="end: true"></div>
-    </div>
-    <div class="content">
-      <!-- Main content that scrolls -->
-<h1>Lorem Ipsum</h1>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris orci ipsum, fermentum vitae viverra ac, blandit sit amet augue. Sed id tortor magna. Nulla facilisi. Aliquam erat volutpat. Curabitur sagittis massa quis eleifend convallis. Aliquam erat volutpat. Morbi vulputate ullamcorper orci ut vehicula. In tempus enim tempor porta maximus. Aliquam fermentum felis ac magna scelerisque porttitor. Donec lacinia facilisis vestibulum.</p>
+        <script>
+            var map,
+                directionsRenderer,
+                directionsService,
+                waypoints = [],
+                jsonWaypoints = [],
+                locations = [],
+                marker,
+                observer;
 
-<p>Ut auctor, nisl sed sodales vehicula, leo nulla pulvinar sem, facilisis placerat est sapien nec magna. Integer tincidunt porttitor diam, a bibendum ex gravida et. Vivamus aliquet nibh purus, ac euismod tortor pretium blandit. Maecenas id arcu magna. Nullam elementum risus vitae elit posuere laoreet. Ut pretium libero ac hendrerit aliquam. Duis aliquet lorem eu lorem interdum dapibus. Maecenas eleifend justo ac nunc lobortis laoreet. Sed semper imperdiet finibus. Donec a arcu mauris. Vivamus nec pellentesque nisl. Fusce odio felis, molestie venenatis quam sit amet, iaculis congue eros. Nulla tortor ex, tristique sed aliquam id, hendrerit nec sapien. Pellentesque laoreet arcu dui, eu porta leo ornare gravida. Donec quis nisl orci.</p>
+            var route = [
+                {lat:-33.81304169068419,lng:151.17029426802648},
+                {lat:-33.04703236787515,lng:151.6149668},
+                {lat:-32.348951807018395,lng:150.08749699357728},
+                {lat:-32.599034017734105,lng:149.5867550625885},
+                {lat:-31.27334049372182,lng:149.277127345301},
+                {lat:-31.280637382157323,lng:149.0135578304929},
+                {lat:-28.97224834747879,lng:147.79550597705045},
+                {lat:-32.056069337737895,lng:151.6622943328867},
+                {lat:-31.88423648651268,lng:152.6542647065874},
+            ];
 
-<p>Praesent sodales tellus tincidunt mauris vestibulum, et lobortis nisl pharetra. Praesent condimentum ultricies eros, et suscipit sapien sodales sit amet. Fusce efficitur egestas ex in ultricies. Quisque vehicula, est non volutpat rutrum, leo libero vestibulum tortor, quis accumsan dui velit vel tortor. Donec tempor metus facilisis massa tempus, at sollicitudin lorem eleifend. Maecenas ultricies volutpat sapien, et rhoncus nisl vulputate imperdiet. Etiam sed elit lacinia, bibendum velit sed, consectetur justo. Pellentesque fringilla lorem at dapibus pulvinar. Etiam pharetra eros sit amet metus facilisis aliquet at at quam.</p>
+            document.addEventListener("DOMContentLoaded", () => {    
+                
+                let locationsTask = getLocations();
+                locationsTask.then(function(data) {
+                    locations = data;
 
-<p>Nunc sollicitudin nulla odio, eu malesuada dolor lacinia non. Nullam congue consectetur augue, in finibus lacus hendrerit id. In nec dictum orci. Praesent nec interdum lacus. Morbi quis turpis sit amet nibh pretium sollicitudin vitae quis dui. Donec at eleifend felis, quis convallis quam. Curabitur ac tincidunt justo. Aenean lorem lorem, rhoncus sed molestie sit amet, molestie vitae mauris. Vestibulum at venenatis arcu, at convallis neque. Etiam a bibendum eros, a laoreet lorem. Integer lobortis interdum nunc eget ullamcorper. Duis dignissim auctor ante, condimentum finibus leo vehicula vel. Suspendisse pellentesque leo vel maximus mattis. Morbi quis arcu vitae eros volutpat aliquet id hendrerit mauris.</p>
+                    var featuredLocation = 'initiated';
+                    var isFeaturedLocation = false;
+                    const icon = document.createElement("div");
+                    icon.innerHTML = '<i class="fa fa-pizza-slice fa-lg"></i>';
+                    var content = document.getElementById('content');
+                    for (const location of locations) {
+                        if(!location["Dropbox Link"]) continue;
+                        var div = document.createElement("div");
+                        div.setAttribute("id",`location-${location.ID}`);
+                        div.dataset.location = location.ID;
+                        div.classList.add("waypoint");
+                        if (featuredLocation == 'initiated' || 
+                            (
+                                location.featuredLocation &&
+                                featuredLocation != location.featuredLocation
+                            )
+                        ){
+                            featuredLocation = location.featuredLocation;
+                            isFeaturedLocation = true;
+                            var h1 = document.createElement('h1');
+                            div.classList.add("featured");
+                            h1.innerHTML = featuredLocation;
+                            div.appendChild(h1);
+                            try{
 
-<p>Pellentesque laoreet mollis arcu, quis fringilla lorem. Praesent euismod porttitor aliquam. Fusce rhoncus nisl non mollis mattis. Nam consectetur tempus interdum. Sed suscipit metus in dolor laoreet, quis volutpat dolor vulputate. Sed in justo imperdiet, tempus metus nec, placerat justo. Etiam pellentesque vitae ex non tincidunt. Nunc ullamcorper eget risus sed malesuada. Nunc a fermentum neque, non vulputate nisl. In sit amet laoreet lorem, a fermentum ipsum. Aliquam arcu dolor, rhoncus quis fermentum ac, blandit vitae turpis. Mauris vitae enim est. Donec placerat risus enim, eget finibus felis iaculis nec.</p>
+                                const featuredTag = document.createElement("div");
 
-<p>Donec et varius nunc. Etiam luctus massa dapibus, condimentum velit non, dictum est. Nam sem eros, eleifend vitae dignissim venenatis, laoreet non velit. Mauris finibus faucibus dui quis eleifend. Duis rhoncus augue et nunc blandit, lobortis tristique diam placerat. Mauris aliquet velit ut augue pretium sagittis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin massa elit, interdum eget augue nec, molestie efficitur velit. Nullam commodo auctor placerat. Donec et risus dui. Integer ultricies interdum neque, non rutrum libero sollicitudin non. Nullam neque elit, lacinia in ultrices eu, fringilla vitae turpis.</p>
+                                featuredTag.className = "featured-tag";
+                                featuredTag.textContent = location.featuredLocation;
 
-<p>Donec at porttitor dui. Aliquam nisl dolor, aliquet quis massa lacinia, rhoncus vehicula est. Nunc iaculis lorem nec varius convallis. Sed ut nunc lacinia, gravida augue faucibus, sodales velit. Curabitur ut orci sit amet dui porta efficitur ut non lacus. Nam metus nisi, bibendum condimentum nulla lobortis, rhoncus pharetra nisl. Fusce erat risus, pharetra ut convallis id, efficitur eget quam. Donec convallis felis sit amet nunc pretium, eget dapibus ex vulputate. Sed cursus pellentesque ante eget efficitur. Aliquam erat volutpat.</p>
+                                var AdvancedMarkerElement = new google.maps.marker.AdvancedMarkerElement({
+                                    map,
+                                    content: featuredTag,
+                                    position: {lat:parseFloat(location.latitude),lng:parseFloat(location.longitude)},
+                                    title: location.imageTitle,
+                                    collisionBehavior: "OPTIONAL_AND_HIDES_LOWER_PRIORITY",
+                                    zIndex: 100
+                                });
+                                
+                                AdvancedMarkerElement.addListener("click", ()=>{
+                                    let el = document.getElementById(`location-${location.ID}`);
+                                    el.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+                                });
+                            } catch(e){
+                                console.error('add',e);
+                            }
+                        }
+                        div.innerHTML +=`
+                            <div class="location-containter">
+                                <img src="${location['Dropbox Link']}&raw=1" class="location-image large" alt="${location.imageTitle}" </img>
+                                <div class="overlay">
+                                    <i class="fas fa-info-circle unhover"></i>
+                                    <div class="hover overlay-title">${location.imageTitle}</div>
+                                    <div class="hover overlay-text">${location.description}</div>
+                                </div>
+                            </div>
+                            `;
+                        
+                        content.appendChild(div);
 
-<p>Fusce sed mattis mauris. Aliquam non ipsum facilisis, elementum nulla non, volutpat orci. Duis venenatis varius risus, non venenatis nibh semper ut. Suspendisse molestie et justo et varius. Nam sem enim, pretium id viverra facilisis, suscipit quis tellus. Cras vestibulum pretium sollicitudin. Maecenas auctor leo at egestas gravida. Maecenas laoreet fringilla nisi eu dignissim. Integer semper odio nec ex elementum rutrum. Proin lobortis nunc sed lobortis luctus. Mauris sit amet diam vel sem porttitor cursus.</p>
+                        div.addEventListener("mouseover", function(e){
+                            moveMarker(e.target.closest(".waypoint").getAttribute("data-location"));
+                        });
+                    }
 
-<p>Morbi in lorem odio. Vestibulum nibh sapien, tristique a condimentum at, maximus ac libero. Aliquam convallis, dolor vitae pretium fringilla, justo nunc laoreet est, vel mattis mauris erat eget nisi. Aenean convallis malesuada tristique. Morbi faucibus vestibulum purus sed semper. Vestibulum vehicula enim nunc, lobortis malesuada urna commodo at. Duis sed diam euismod, fermentum nulla vitae, consequat massa. Aenean facilisis, magna a tempor elementum, lacus nulla eleifend massa, ut blandit velit ex et massa.</p>
+                    for (r = 1; r < route.length; r++) { 
+                        waypoints.push({
+                            location: new google.maps.LatLng(route[r].lat,route[r].lng),
+                            stopover: false
+                        });
+                    }
+                    directionsService
+                        .route({
+                          origin: new google.maps.LatLng(route[0].lat,route[0].lng),
+                          destination: new google.maps.LatLng(route[0].lat,route[0].lng),
+                          waypoints: waypoints,
+                          optimizeWaypoints: true,
+                          travelMode: google.maps.TravelMode.DRIVING,
+                        })
+                        .then((response) => {
+                          directionsRenderer.setDirections(response);
+                        })
+                        .catch((e) => {
+                            console.warn("Directions request failed due to " + status);
+                        })
 
-<p>In aliquam massa ut scelerisque accumsan. Nam sit amet nibh dui. Suspendisse potenti. Donec tempus orci elit, quis egestas mi finibus vitae. Phasellus vehicula eget ex at blandit. Proin viverra aliquam ipsum nec faucibus. Nam commodo sapien quis placerat porta. Phasellus nulla leo, tincidunt non lacinia eu, pharetra non lectus.</p>
 
-<p>Sed metus urna, mattis eget lorem in, viverra suscipit mauris. In hac habitasse platea dictumst. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Ut massa leo, mattis nec ligula at, porta ultrices libero. Donec ex risus, tristique in ex nec, euismod sagittis libero. Integer at dolor scelerisque, iaculis leo a, rhoncus quam. Mauris in ligula dolor. Praesent vel fringilla tortor, vitae consectetur lectus. Morbi pulvinar tristique neque eu convallis. Etiam vulputate ex sed erat blandit consequat. Etiam lacinia pharetra pretium. Ut bibendum libero id lectus eleifend, vel tincidunt nunc imperdiet. Phasellus congue ligula ut porta aliquet. Nam hendrerit augue eget efficitur tincidunt. Nullam pretium purus et sapien mattis placerat. Quisque mattis, neque a interdum molestie, leo purus dignissim arcu, sit amet luctus libero magna pretium augue.</p>
+                    marker = new google.maps.marker.AdvancedMarkerElement({
+                        map,
+                        position: new google.maps.LatLng(route[0].lat,route[0].lng),
+                        draggable: false,
+                        title: "Drag me!",
+                        zIndex: 9999,
+                        collisionBehavior: "OPTIONAL_AND_HIDES_LOWER_PRIORITY"
+                    });
 
-<p>Aliquam lacinia libero porta ultricies varius. Fusce augue ipsum, ullamcorper vitae porta pretium, feugiat eu erat. Integer sed diam porttitor, fringilla sem nec, lacinia diam. Sed finibus dignissim tortor. Nam pretium felis et volutpat porttitor. Donec mollis nunc nibh, sed feugiat orci maximus a. Cras id urna malesuada, pharetra felis eget, facilisis felis. Pellentesque posuere diam in velit sodales, bibendum porta tortor placerat. Vivamus tellus nunc, finibus vel magna sed, dictum tincidunt lectus. Mauris sit amet auctor lorem. Cras condimentum luctus nibh, a sollicitudin orci pulvinar et. Donec ut sem lobortis, vulputate lectus quis, efficitur arcu. Integer semper venenatis nisl vitae pulvinar. Integer ligula enim, condimentum sed commodo efficitur, vulputate blandit dui.</p>
 
-<p>Quisque venenatis lobortis arcu, sed sodales velit. Ut bibendum tempus ex rhoncus varius. Integer rutrum risus vitae turpis pharetra tincidunt. Cras scelerisque elit vel lorem pretium, non cursus ante semper. Fusce porta, felis id mollis pulvinar, mauris leo laoreet eros, id volutpat leo elit sed purus. Proin quis lacus quis erat scelerisque condimentum nec eu urna. Mauris tristique enim turpis, quis suscipit mi facilisis sed. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae;</p>
+                    observer = new IntersectionObserver(function(entries, observer) {
+                        entries.forEach((entry)=>{
+                            console.log(entry.target.id, (entry.isIntersecting) ? 'entering' : 'exiting');
+                        });
+                    });
 
-<p>Etiam nisi metus, dapibus ut nulla ac, tristique lobortis sem. Fusce sit amet molestie lacus, ac dapibus libero. Maecenas maximus lectus scelerisque eros luctus faucibus. Vivamus ut malesuada ipsum. Fusce facilisis, turpis gravida euismod posuere, ipsum erat ullamcorper sem, feugiat semper felis risus eu lacus. Aenean volutpat vitae eros id aliquet. Suspendisse vestibulum neque ac est bibendum iaculis quis quis diam. Quisque at magna eros. Morbi sagittis odio neque, ac sollicitudin orci pharetra et.</p>
+                    document.querySelectorAll('.waypoint').forEach((i) => {
+                        if (i) {
+                            observer.observe(i);
+                        }
+                    });
+                });
+            });
 
-<p>Sed nisi libero, blandit facilisis bibendum vel, faucibus vestibulum arcu. Donec et ante cursus dui blandit elementum pharetra id mi. Duis nec libero eget mi consequat pellentesque at id mi. Nullam elit ex, maximus id mi vitae, consectetur tincidunt augue. Aliquam enim dolor, fermentum in semper vel, viverra a lorem. Suspendisse molestie egestas turpis in efficitur. Praesent non tincidunt risus. Duis eget quam eleifend, luctus dui at, euismod tellus. Donec quis vestibulum felis. Morbi tincidunt dignissim nisl ut imperdiet. Fusce at augue turpis. Phasellus ut congue metus, viverra lacinia urna. Ut ut accumsan est. Nam ut sapien nisl. Pellentesque lectus nisl, ornare ut sodales quis, dapibus nec massa. Donec a tincidunt odio, nec interdum tortor.</p>
-
-<p class="waypoint" id="waypoint-1">Mauris eget volutpat quam. Fusce a sagittis dolor, in accumsan felis. Pellentesque aliquet at nunc quis venenatis. In iaculis tortor non tellus gravida, id ornare nunc tristique. Mauris nunc diam, rhoncus ac elit non, imperdiet semper mauris. Curabitur neque ex, fermentum vel odio et, egestas congue purus. In sed bibendum urna. In et finibus dui. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Maecenas eu ex non felis egestas pretium. Vivamus eget mi pellentesque, porta lacus quis, auctor augue. Nam lacinia convallis sapien sagittis viverra. Sed egestas turpis non sollicitudin porta. Donec vehicula eu dui eget luctus.</p>
-
-<p>Integer dictum nunc mollis, egestas quam ac, pharetra nisl. Cras sed metus et metus pellentesque ultricies. Proin in ante vitae mi consequat ornare. Ut sed massa quam. Donec consectetur magna vel nisi faucibus sodales. Aliquam in dui id dui dapibus eleifend at eu mi. Etiam venenatis convallis feugiat. Praesent quis lorem eleifend, ullamcorper ipsum at, scelerisque metus.</p>
-
-<p class="waypoint" id="waypoint-2">Vivamus scelerisque, sem eget egestas sodales, dolor tortor rhoncus nibh, vitae rutrum nibh arcu ut arcu. In a pulvinar arcu, sed malesuada nibh. Nulla sodales iaculis ipsum, et volutpat ante commodo ac. Ut venenatis odio a egestas porttitor. Sed lobortis aliquet orci, viverra tincidunt arcu consequat sit amet. Vivamus tellus sem, volutpat non enim vel, vulputate ultrices dolor. Maecenas vestibulum aliquet lobortis. Phasellus dignissim leo tortor, vel aliquam velit rhoncus id. Duis sollicitudin, ante vel imperdiet lacinia, justo nibh iaculis augue, sed vehicula metus erat sit amet risus.</p>
-
-<p>Donec et fermentum tellus, eget laoreet mauris. Curabitur placerat ipsum non augue porta tincidunt. Fusce hendrerit convallis diam, sed porttitor augue elementum a. Nulla facilisi. Ut consequat ac dui at tempus. Praesent pretium, sapien lacinia eleifend aliquet, ipsum nisl pretium lectus, ac elementum mi purus et dui. Ut non ligula non justo placerat eleifend. Sed feugiat ultricies eros, eu faucibus felis semper feugiat.</p>
-
-<p>Maecenas id tristique elit. Mauris consequat augue nec sem tincidunt elementum. Curabitur fermentum justo et leo vehicula, id finibus justo porttitor. Nulla hendrerit ac magna ut tempor. Duis tempor tristique ante, id gravida erat egestas vitae. Sed ullamcorper cursus pharetra. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Donec rutrum, ipsum quis auctor hendrerit, est orci convallis risus, et fringilla nulla sem quis lorem. Maecenas ornare dolor at velit hendrerit consectetur. Cras odio tellus, porta vel semper non, porttitor et nibh. Integer finibus massa nibh, ac euismod lorem tempor ac. Nam sollicitudin sit amet mauris eget lobortis. Nunc bibendum mi non orci venenatis, ac rhoncus turpis aliquet. Sed dignissim facilisis volutpat. Praesent ante diam, fermentum tempor magna ut, sagittis pretium tortor. Nulla facilisi.</p>
-
-<p>Sed condimentum nisl a lorem sagittis rutrum. Etiam cursus congue nunc in facilisis. Etiam venenatis aliquam velit, eget lacinia magna sagittis ut. Quisque aliquam metus ac urna maximus interdum. Mauris ultricies dui id eros sagittis, pharetra maximus ex lacinia. Donec interdum volutpat libero, fermentum hendrerit massa ullamcorper ullamcorper. Sed vel ipsum vitae neque cursus mollis. Sed non nulla velit. Aliquam scelerisque interdum odio, eu dignissim enim tincidunt ut. Quisque tincidunt lacus a viverra egestas.</p>
-
-<p>Quisque efficitur eros id tortor hendrerit pulvinar. Sed laoreet tristique tincidunt. Nullam pharetra posuere dui, non porta eros pellentesque a. Nam tincidunt vestibulum rhoncus. Vivamus sit amet ligula eget nisl vehicula hendrerit non quis dui. Maecenas iaculis ut enim nec ornare. Aliquam lacinia molestie ornare. Aliquam euismod magna fermentum magna rutrum, quis egestas lorem ullamcorper. Nam efficitur vitae metus eget posuere. Donec in lacus vitae orci faucibus porta eget eget tortor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
-
-<p>Integer viverra bibendum consequat. Sed eu egestas ante, at pulvinar dui. Sed nec aliquam justo. Phasellus ligula elit, imperdiet quis lacus ac, suscipit tristique metus. Nulla hendrerit nisi non erat placerat venenatis bibendum nec velit. Nulla finibus diam eu erat faucibus placerat. Suspendisse ornare diam lorem, eu maximus est dictum eget. Nulla a cursus sapien. Praesent enim est, posuere in ante condimentum, maximus aliquet lectus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Cras mollis tincidunt elementum. Pellentesque efficitur ante ac malesuada imperdiet. Morbi eleifend sem eget quam ullamcorper, quis laoreet mauris finibus. Nunc maximus vitae turpis ac faucibus.</p>
-
-<p>Proin et viverra leo. Nullam maximus at purus et tempus. Integer augue nisl, laoreet eu semper sit amet, pellentesque vitae lorem. Vivamus massa augue, laoreet nec ipsum interdum, dictum eleifend neque. Nunc ullamcorper massa sed egestas imperdiet. Fusce urna nunc, iaculis eu cursus malesuada, ultricies consectetur erat. Mauris aliquet sapien arcu, ac dignissim est elementum non.</p>
-
-<p class="waypoint" id="waypoint-3">Fusce dictum, erat et bibendum iaculis, velit dolor aliquam tellus, id luctus magna nisl ut lorem. Ut consectetur odio convallis enim sodales, ac dignissim ante interdum. Etiam interdum, nunc vitae elementum tristique, turpis tellus fermentum sem, et maximus nulla lacus et est. Praesent eleifend, nisi sit amet sollicitudin dignissim, nibh sapien facilisis risus, in vestibulum velit quam id nibh. Nam dictum pretium risus et imperdiet. Aliquam erat volutpat. Maecenas erat dui, malesuada eget ultrices nec, rhoncus et libero. Praesent venenatis dui a ligula luctus mollis.</p>
-
-<p>Suspendisse aliquam turpis nunc, quis molestie tellus condimentum ut. Vivamus et neque mattis, euismod metus sed, auctor diam. Donec molestie purus vitae varius molestie. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; In sed elit elit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Quisque dignissim iaculis elit, et sagittis orci consequat id. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eleifend malesuada ligula vitae sodales. Vestibulum aliquam sit amet risus vitae scelerisque. In neque tellus, sodales in ipsum ut, semper viverra quam. Praesent congue dapibus turpis, eget rutrum turpis bibendum a.</p>
-
-<p>Sed commodo, nulla in dictum elementum, tellus sapien vestibulum tortor, ut congue felis metus ut dui. Nullam auctor gravida purus sit amet convallis. Praesent lacinia, sapien sit amet accumsan volutpat, lectus elit congue tortor, nec finibus diam purus nec ligula. Etiam eget risus quis sapien viverra malesuada et ut quam. Ut sed dui lobortis, lacinia magna sed, luctus tellus. Praesent rhoncus, mi at lacinia rhoncus, felis massa mattis enim, sodales vehicula elit risus ac elit. Etiam id vestibulum turpis, non mollis nisl. Fusce non libero odio. Suspendisse non neque eu lacus mollis volutpat eget at mauris. Mauris vel tristique arcu, sed ultricies justo.</p>
-
-<p>Ut tristique, libero et bibendum aliquam, libero diam accumsan erat, a pellentesque lectus eros eget nulla. Vivamus eu eros non sem accumsan semper. Aenean eu dapibus diam. Nullam feugiat pulvinar sem, non ornare nibh accumsan sed. Maecenas ut imperdiet ex. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque vel enim at lacus imperdiet egestas. Aenean ac quam et quam egestas iaculis aliquet nec erat. Mauris condimentum, libero id sodales interdum, massa odio facilisis eros, non sodales dolor turpis sed sapien.</p>
-
-<p>Integer nunc lectus, posuere sed arcu sed, tristique suscipit mauris. Sed vestibulum mauris eu porttitor mattis. Nullam vel ipsum semper, pulvinar nunc at, pretium sapien. Nullam sit amet porttitor arcu. Duis dapibus interdum luctus. Nulla varius elit a mauris vulputate feugiat. Mauris mattis orci eu tempor dictum. Nunc congue tempor vestibulum. Mauris eget odio vel risus blandit pretium. Morbi dignissim tellus lacus, at ullamcorper elit tempus at.</p>
-
-<p>Donec dapibus mauris quis hendrerit vestibulum. Cras sodales dignissim turpis sodales varius. Fusce ac blandit magna, ut lacinia arcu. Etiam condimentum lectus non pretium dictum. Ut non lorem eget ex dictum aliquet. Aenean posuere justo a elit placerat placerat. Aliquam faucibus sagittis congue. Nunc dictum ligula ac massa porta, ac finibus risus lacinia. Nullam quis mattis metus. Aenean et ipsum porta, ornare nunc at, varius sem. Donec faucibus iaculis facilisis. Cras mollis tincidunt sodales. Phasellus lorem urna, cursus ac posuere non, porttitor non ex. Sed mattis est nunc, volutpat vulputate ligula hendrerit eu.</p>
-
-<p>Etiam malesuada augue leo, eget vehicula mi lacinia gravida. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Etiam eros nisl, tempus at feugiat eget, commodo sed ligula. Proin in massa congue dolor mollis sodales eu ut est. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Integer vestibulum, metus at varius facilisis, velit sapien sodales tortor, eu hendrerit dolor magna sed urna. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In vestibulum, turpis sed pellentesque consequat, turpis ligula faucibus dui, vel mattis eros arcu sed nunc. Nam erat leo, hendrerit id mollis at, ornare eu elit.</p>
-
-<p>Etiam ultricies eget elit id dapibus. Quisque scelerisque dolor id sem varius ultrices. Curabitur commodo, nunc at rutrum porta, nisl sapien varius arcu, id suscipit nunc felis sit amet libero. Donec at massa aliquam ante ultrices placerat nec in leo. Cras bibendum magna sed neque vulputate, et cursus augue blandit. Praesent semper velit a ipsum varius tristique. Duis dolor purus, lobortis eget maximus vitae, vestibulum quis nisl. Aliquam at ipsum et neque vehicula ornare.</p>
-
-<p>Vivamus dapibus sapien eget posuere varius. Pellentesque nec sodales ligula. Nullam tristique sagittis nulla, sit amet faucibus massa elementum luctus. Donec quis accumsan ex. Curabitur vel imperdiet nisl. Integer eu nisl tincidunt dui lacinia sagittis quis at massa. Nam nec mauris vitae arcu vulputate condimentum at eget massa. Integer faucibus, tellus eget congue hendrerit, lorem sapien iaculis felis, vitae mattis est libero in leo. Nullam eleifend, leo et placerat convallis, orci elit pharetra tellus, vel rhoncus tellus lectus sit amet justo. Praesent ut auctor mauris, sit amet laoreet nisl. Suspendisse potenti.</p>
-
-<p>Duis nec risus id est tristique sagittis eu id magna. Sed mattis est sed urna viverra luctus. Etiam mollis metus in purus cursus, vel laoreet odio fringilla. Suspendisse auctor in dui eget condimentum. Vivamus dictum nisl a dolor gravida, et fringilla urna semper. Sed accumsan malesuada est et interdum. Aenean congue dapibus lorem, sed faucibus felis lobortis sed. Sed rhoncus, mi et rhoncus dignissim, massa tortor malesuada erat, id placerat neque nunc ut mi. Curabitur pretium arcu non urna maximus congue.</p>
-
-<p>Donec ac efficitur est. Aliquam congue velit quis dui rhoncus, sodales iaculis leo sodales. Sed feugiat congue leo nec elementum. Nulla egestas felis et fermentum dapibus. Pellentesque est felis, malesuada at semper ut, efficitur vel quam. Vivamus mauris odio, viverra at dictum eu, aliquam laoreet velit. Vestibulum ac scelerisque augue. Praesent vitae nisi felis.</p>
-      <!-- Add more content as needed -->
-        <button id="btnSatellite" type="button">Satellite View</button>
-    </div>
-  </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script>
-    var map;
-      
-    $(document).ready(function(){
-      window.initMap = initMap;
-        console.log('loaded')
-
-        const observer = new IntersectionObserver(function (entries, observer) {
-          entries.forEach((entry) => {
-            if ( entry.isVisible ) {
-              console.log('this',this);
+            async function getLocations() {
+                return new Promise(async function(resolve, reject) {
+                    const xhr = new XMLHttpRequest(); 
+                    xhr.open("GET", "ajax/locations", true); 
+                    xhr.getResponseHeader("Content-type", "application/json"); 
+                  
+                    xhr.onload = function() { 
+                        resolve(JSON.parse(this.responseText)); 
+                    } 
+                  
+                    xhr.send(); 
+                });
             }
-          });
-        });
-    
-        observer.observe(document.querySelector('.waypoint'));
-    });
 
-    
-      
-    async function initMap() {
-        const { Map } = await google.maps.importLibrary("maps");
-        const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
-        
-        // Create a map object, and include the MapTypeId to add
-        // to the map type control.
-        map = new google.maps.Map(document.getElementById("map"), {
-            mapId:"441e98620296930",
-            center: { lat: -34.00, lng: 150.000 },
-            zoom: 7,
-            mapTypeControl: false,
-            mapTypeControlOptions: {},
-            scrollwheel: false,
-            scaleControl: false,
-            zoomControl: false,
-            fullscreenControl: false,
-            gestureHandling: 'none',
-            disableDoubleClickZoom: true,
-            draggable: false,
-            navigationControl: false,
-            streetViewControl: false,
-        });
+            async function initMap() {
+                const {Map} = await google.maps.importLibrary("maps");
+                const {AdvancedMarkerElement} = await google.maps.importLibrary("marker");
+                directionsRenderer = new google.maps.DirectionsRenderer();
 
+                // Create a map object, and include the MapTypeId to add
+                // to the map type control.
+                map = new google.maps.Map(document.getElementById("map"),{
+                    mapId: "441e98620296930",
+                    center: {
+                        lat: -34.00,
+                        lng: 150.000
+                    },
+                    zoom: 7,
+                    minZoom: 7,
+                    maxZoom: 7,
+                    mapTypeControl: false,
+                    mapTypeControlOptions: {},
+                    scrollwheel: false,
+                    scaleControl: false,
+                    zoomControl: false,
+                    fullscreenControl: false,
+                    gestureHandling: 'none',
+                    disableDoubleClickZoom: true,
+                    draggable: false,
+                    navigationControl: false,
+                    streetViewControl: false,
+                });
 
-        for (const property of properties) {
-            const AdvancedMarkerElement = new google.maps.marker.AdvancedMarkerElement({
-                map,
-                content: buildContent(property),
-                position: property.position,
-                title: property.description,
-            });
+                directionsService = new google.maps.DirectionsService();
+                directionsRenderer.setMap(map);
+                
+                
+            }
 
-            AdvancedMarkerElement.addListener("click", () => {
-                toggleHighlight(AdvancedMarkerElement, property);
-            });
-        }
-    } 
-
-    $(document).on("click", "#btnSatellite", function(e) {
-        toggleSatellite();
-    });
-
-
-      function toggleSatellite(){
-          console.log(map)
-          map.setMapTypeId((map.mapTypeId === "satellite") ? 'roadmap' : 'satellite');
-      }
-
-    function toggleHighlight(markerView, property) {
-        if (markerView.content.classList.contains("highlight")) {
-            markerView.content.classList.remove("highlight");
-            markerView.zIndex = null;
-        } else {
-            markerView.content.classList.add("highlight");
-            markerView.zIndex = 1;
-        }
-    }
-
-    function buildContent(property) {
-        const content = document.createElement("div");
-
-        content.classList.add("property");
-        content.innerHTML = `
-            <div class="icon">
-                <i aria-hidden="true" class="fa fa-icon fa-${property.type}" title="${property.type}"></i>
-                <span class="fa-sr-only">${property.type}</span>
-            </div>
-            <div class="details">
-                <div class="price">${property.price}</div>
-                <div class="address">${property.address}</div>
-                <div class="features">
-                <div>
-                    <i aria-hidden="true" class="fa fa-bed fa-lg bed" title="bedroom"></i>
-                    <span class="fa-sr-only">bedroom</span>
-                    <span>${property.bed}</span>
-                </div>
-                <div>
-                    <i aria-hidden="true" class="fa fa-bath fa-lg bath" title="bathroom"></i>
-                    <span class="fa-sr-only">bathroom</span>
-                    <span>${property.bath}</span>
-                </div>
-                <div>
-                    <i aria-hidden="true" class="fa fa-ruler fa-lg size" title="size"></i>
-                    <span class="fa-sr-only">size</span>
-                    <span>${property.size} ft<sup>2</sup></span>
-                </div>
-                </div>
-            </div>
-            `;
-        return content;
-        }
-
-    const properties = [
-        {
-            address: "215 Emily St, MountainView, CA",
-            description: "Single family house with modern design",
-            price: "$ 3,889,000",
-            type: "home",
-            bed: 5,
-            bath: 4.5,
-            size: 300,
-            position: { lat: -33.86, lng: 151.209 },
-        }
-    ];
-
-    
-</script>
-<script defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUtmgcZH2SX6ZmqbzWtZv8Qz19hqyVkQA&callback=initMap">
-</script>
-</body>
+            function moveMarker(id) {
+                for (const location of locations) {
+                    if(location.ID==id){
+                        console.log(location);
+                        marker.position = new google.maps.LatLng(parseFloat(location.latitude),parseFloat(location.longitude));
+                        //marker.setPosition(new google.maps.LatLng(parseFloat(location.latitude),parseFloat(location.longitude)));
+                        //marker.setZIndex(9999)
+                        return;
+                        
+                    }
+                }          
+            };
+        </script>
+        <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUtmgcZH2SX6ZmqbzWtZv8Qz19hqyVkQA&callback=initMap"></script>
+    </body>
 </html>
