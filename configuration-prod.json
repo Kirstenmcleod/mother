@@ -1,8 +1,8 @@
 {
   "Parameters" : {
     "Environment" : "prod",
-    "SecureRoles" : "codepipeline-role",
-    "Roles" : "codepipeline-role"
+    "SecureRoles" : "mother-service-role",
+    "Roles" : "mother-service-role"
   },
   "Tags" : {
     "environment" : "prod",
