@@ -18,7 +18,6 @@ body {
 }
 .content {
   margin-left: 40vh; /* Should match fixed-tile width */
-  padding: 20px;
 }
 /* Just for styling content area */
 .content p {
@@ -50,10 +49,7 @@ body {
     height: 100vh;
     }
 
-    /*
-    * Property styles in unhighlighted state.
-    */
-    .property {
+    .location {
     align-items: center;
     background-color: #FFFFFF;
     border-radius: 50%;
@@ -70,7 +66,7 @@ body {
     width: 30px;
     }
 
-    .property::after {
+    .location::after {
     border-left: 9px solid transparent;
     border-right: 9px solid transparent;
     border-top: 9px solid #FFFFFF;
@@ -85,39 +81,39 @@ body {
     z-index: 1;
     }
 
-    .property .icon {
+    .location .icon {
     align-items: center;
     display: flex;
     justify-content: center;
     color: #FFFFFF;
     }
 
-    .property .icon svg {
+    .location .icon svg {
     height: 20px;
     width: auto;
     }
 
-    .property .details {
+    .location .details {
     display: none;
     flex-direction: column;
     flex: 1;
     }
 
-    .property .address {
+    .location .address {
     color: #9E9E9E;
     font-size: 10px;
     margin-bottom: 10px;
     margin-top: 5px;
     }
 
-    .property .features {
+    .location .features {
     align-items: flex-end;
     display: flex;
     flex-direction: row;
     gap: 10px;
     }
 
-    .property .features > div {
+    .location .features > div {
     align-items: center;
     background: #F5F5F5;
     border-radius: 5px;
@@ -128,10 +124,7 @@ body {
     padding: 5px;
     }
 
-    /*
-    * Property styles in highlighted state.
-    */
-    .property.highlight {
+    .location.highlight {
     background-color: #FFFFFF;
     border-radius: 8px;
     box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.2);
@@ -140,87 +133,81 @@ body {
     width: auto;
     }
 
-    .property.highlight::after {
-    border-top: 9px solid #FFFFFF;
+    img.location-image.large{
+          width:100%;
+          vertical-align: bottom;
     }
 
-    .property.highlight .details {
-    display: flex;
+    /* Make the image to responsive */
+    .image {
+      display: block;
+      width: 100%;
+      height: auto;
     }
 
-    .property.highlight .icon svg {
-    width: 50px;
-    height: 50px;
+    /* Container needed to position the overlay. Adjust the width as needed */
+    .location-containter {
+      position: relative;
     }
 
-    .property .bed {
-    color: #FFA000;
+    /* The overlay effect - lays on top of the container and over the image */
+    .overlay {
+      position: absolute;
+      /* bottom: 0; */
+      top: 0;
+      width: 30px;
+      z-index: 999;
+      right: 0;
+      background: rgb(0, 0, 0);
+      background: rgba(0, 0, 0, 0.5); /* Black see-through */
+      color: #f1f1f1;
+      height: 100%;
+      transition: .5s ease;
+      opacity:0;
+      color: white;
+      padding: 0px;
+      font-size: 20px;
+      text-align: center;
     }
 
-    .property .bath {
-    color: #03A9F4;
+    .overlay-title{
+          font-size: 20px;
+          text-align: center;
     }
 
-    .property .size {
-    color: #388E3C;
+    .overlay-text{
+          padding-top: 10px;
+          font-size: 12px;
+          text-align: left;
     }
 
-    /*
-    * House icon colors.
-    */
-    .property.highlight:has(.fa-house) .icon {
-    color: var(--house-color);
+    .hover {
+          display:none;
     }
 
-    .property:not(.highlight):has(.fa-house) {
-    background-color: var(--house-color);
+    .overlay:hover {
+          width: 60%;
+          transition: .5s ease;
     }
 
-    .property:not(.highlight):has(.fa-house)::after {
-    border-top: 9px solid var(--house-color);
+    .overlay:hover .hover {
+          display: block;
     }
 
-    /*
-    * Building icon colors.
-    */
-    .property.highlight:has(.fa-building) .icon {
-    color: var(--building-color);
+    .overlay:hover .unhover {
+          display: none;
+    }
+    
+    /* When you mouse over the container, fade in the overlay title */
+    .waypoint:hover .overlay {
+      opacity: 1;
     }
 
-    .property:not(.highlight):has(.fa-building) {
-    background-color: var(--building-color);
+      /* HTML marker styles */
+    .featured-tag {
+      color: #FFFFFF;
+      font-size: 14px;
+      padding: 10px 15px;
+      position: relative;
     }
 
-    .property:not(.highlight):has(.fa-building)::after {
-    border-top: 9px solid var(--building-color);
-    }
-
-    /*
-    * Warehouse icon colors.
-    */
-    .property.highlight:has(.fa-warehouse) .icon {
-    color: var(--warehouse-color);
-    }
-
-    .property:not(.highlight):has(.fa-warehouse) {
-    background-color: var(--warehouse-color);
-    }
-
-    .property:not(.highlight):has(.fa-warehouse)::after {
-    border-top: 9px solid var(--warehouse-color);
-    }
-
-    /*
-    * Shop icon colors.
-    */
-    .property.highlight:has(.fa-shop) .icon {
-    color: var(--shop-color);
-    }
-
-    .property:not(.highlight):has(.fa-shop) {
-    background-color: var(--shop-color);
-    }
-
-    .property:not(.highlight):has(.fa-shop)::after {
-    border-top: 9px solid var(--shop-color);
-    }
