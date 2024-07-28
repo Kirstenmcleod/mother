@@ -3,7 +3,7 @@ version = 0.1
 [default.deploy]
 [default.deploy.parameters]
 stack_name = "mother"
-s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-uah8fknm9kxm"
+s3_bucket = "mother-code-pipeline"
 s3_prefix = "mother"
 region = "ap-southeast-2"
 capabilities = "CAPABILITY_IAM"
