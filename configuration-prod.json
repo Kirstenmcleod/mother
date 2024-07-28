@@ -1,0 +1,13 @@
+{
+  "Parameters" : {
+    "Environment" : "prod",
+    "SecureRoles" : "codepipeline-role",
+    "Roles" : "codepipeline-role"
+  },
+  "Tags" : {
+    "environment" : "prod",
+    "showback" : "mother",
+    "owner" : "kirsten",
+    "product" : "mother"
+  }
+}

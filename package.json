@@ -10,16 +10,21 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "app.js"
   },
-  "author": "Andrew McLeod",
+  "author": "Kirsten McLeod",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "google-auth-library": "^9.11.0",
+    "google-auth-library": "^9.12.0",
     "google-spreadsheet": "^4.1.2",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "serverless": "^4.1.15",
+    "serverless-http": "^3.2.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.4"
+    "aws-sdk": "^2.1664.0",
+    "nodemon": "^3.1.4",
+    "serverless-dotenv-plugin": "^6.0.0",
+    "serverless-offline": "^13.6.0"
   }
 }
