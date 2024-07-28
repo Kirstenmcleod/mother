@@ -1,11 +1,9 @@
 version: 0.2
-env:
-  parameter-store:
-    S3_BUCKET: '/mother/pipeline/buildBucket'
 phases:
   install:
+    runtime-versions:
+      nodejs: 18
     commands:
-      - n 14.17.4
       - npm install --omit=dev
       - aws cloudformation package --template-file template.yaml --s3-bucket $S3_BUCKET --output-template-file outputSamTemplate.yaml
 artifacts:
