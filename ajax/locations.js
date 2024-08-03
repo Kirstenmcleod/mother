@@ -1,12 +1,17 @@
-const creds = require('../creds.json')
-const sheetId = '1Lo8wa8zJ0Qpv31CoouV3_w3qLnlkuFK7MxgYqHvBf9U';
+const creds                 = require('../creds.json')
+const sheetId               = '1Lo8wa8zJ0Qpv31CoouV3_w3qLnlkuFK7MxgYqHvBf9U';
 const { GoogleSpreadsheet } = require('google-spreadsheet')
-const { JWT } = require('google-auth-library');
+const { JWT }               = require('google-auth-library');
+const secrets               = require('../lib/secrets');
 
 exports.get = async function(req, res) {
+    await secrets.init();
+
+    let clientEmail = await secrets.get("client_email");
+    let privateKey = await secrets.get("private_key");
     const serviceAccountAuth = new JWT({
-        email: creds.client_email,
-        key: creds.private_key,
+        email: clientEmail,
+        key: privateKey,
         scopes: ["https://www.googleapis.com/auth/spreadsheets"],
         });
 

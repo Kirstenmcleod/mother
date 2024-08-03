@@ -1,9 +1,9 @@
-const serverless      = require("serverless-http");
-const express = require('express')
-const app = express()
-const port = 3000
-const path = require('path')
-const locations = require('./ajax/locations')
+const serverless    = require("serverless-http");
+const express       = require('express')
+const app           = express()
+const path          = require('path')
+const locations     = require('./ajax/locations');
+const secrets       = require('./lib/secrets');
 
 // Developer environment settings
 require('dotenv').config();
