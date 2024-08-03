@@ -1,7 +1,7 @@
 org: ${env:ORG}
 app: ${env:APP}
 service: ${env:SERVICE}
-frameworkVersion: '4'
+frameworkVersion: '3'
 useDotenv: true
 
 provider:
@@ -28,7 +28,6 @@ functions:
 
 plugins:
   - serverless-offline
-  - serverless-dotenv-plugin
 
 custom:
   stage: ${opt:stage, self:provider.stage}

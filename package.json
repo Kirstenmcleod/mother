@@ -4,7 +4,7 @@
   "description": "Major project",
   "main": "app.js",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=16.0.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -22,6 +22,6 @@
   },
   "devDependencies": {
     "aws-sdk": "^2.1664.0",
-    "nodemon": "^3.1.4"
+    "serverless": "^3.39.0"
   }
 }
