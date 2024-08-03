@@ -2,7 +2,7 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 14
+      nodejs: 16
     commands:
       - npm install --omit=dev --legacy-peer-deps
       - aws cloudformation package --template-file template.yaml --s3-bucket mother-code-pipeline --output-template-file outputSamTemplate.yaml
