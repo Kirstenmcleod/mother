@@ -21,11 +21,7 @@ functions:
     timeout: 28
     handler: app.handler
     events:
-      - http: 'ANY /public/{proxy+}'
-      - http: 'ANY /ajax/{proxy+}'
-      - http: 'GET /'
-      - http: 'GET /index.html'
-
+      - http: 'ANY /{proxy+}'
 plugins:
   - serverless-offline
 

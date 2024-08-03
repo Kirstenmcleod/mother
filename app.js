@@ -15,8 +15,6 @@ app.get(['/','/index.html'], (req, res) => {
 
 app.get('/ajax/locations', locations.get);
 
-
-
 app.use('/public',express.static(path.join(__dirname, 'public'),{
     dotfiles: "ignore",
     etag: true,
@@ -33,13 +31,12 @@ app.use('/images',express.static(path.join(__dirname, 'images'),{
     immutable:true
 }));
 
-
 app.use(async function(req,res,next) { 
-    console.log('Not Found',req.protocol)     // "https"
-    console.log('Not Found',req.hostname)     // "example.com"
-    console.log('Not Found',req.path)         // "/creatures"
-    console.log('Not Found',req.originalUrl)  // "/creatures?filter=sharks"
-    console.log('Not Found',req.subdomains)   // "['ocean']"
+    console.log('Not Found',req.protocol)
+    console.log('Not Found',req.hostname)
+    console.log('Not Found',req.path)
+    console.log('Not Found',req.originalUrl)
+    console.log('Not Found',req.subdomains)
     return res.status(404).json({
       error: "Not Found",
     });
