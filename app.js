@@ -33,7 +33,12 @@ app.use('/images',express.static(path.join(__dirname, 'images'),{
 }));
 
 
-app.use(async function(req,res,next) {
+app.use(async function(req,res,next) { 
+    console.log('Not Found',req.protocol)     // "https"
+    console.log('Not Found',req.hostname)     // "example.com"
+    console.log('Not Found',req.path)         // "/creatures"
+    console.log('Not Found',req.originalUrl)  // "/creatures?filter=sharks"
+    console.log('Not Found',req.subdomains)   // "['ocean']"
     return res.status(404).json({
       error: "Not Found",
     });
