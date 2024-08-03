@@ -93,9 +93,3 @@ Resources:
             Path: /index.html
             Method: GET
             RestApiId: !Ref ApiGatewayApi
-        ApiEvent5:
-          Type: Api
-          Properties:
-            Path: $default
-            Method: GET
-            RestApiId: !Ref ApiGatewayApi
