@@ -8,7 +8,7 @@ const secrets       = require('./lib/secrets');
 // Developer environment settings
 require('dotenv').config();
 
-app.get(['/','index.html'], (req, res) => {
+app.get(['/','/index.html'], (req, res) => {
     console.log('__dirname',__dirname)
     res.sendFile(path.join(__dirname,`/public/index.html`));
 })

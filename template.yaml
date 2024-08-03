@@ -85,11 +85,17 @@ Resources:
           Type: Api
           Properties:
             Path: /
-            Method: ANY
+            Method: GET
             RestApiId: !Ref ApiGatewayApi
         ApiEvent4:
           Type: Api
           Properties:
             Path: /index.html
-            Method: ANY
+            Method: GET
+            RestApiId: !Ref ApiGatewayApi
+        ApiEvent5:
+          Type: Api
+          Properties:
+            Path: $default
+            Method: GET
             RestApiId: !Ref ApiGatewayApi
