@@ -1,4 +1,3 @@
-const creds                 = require('../creds.json')
 const sheetId               = '1Lo8wa8zJ0Qpv31CoouV3_w3qLnlkuFK7MxgYqHvBf9U';
 const { GoogleSpreadsheet } = require('google-spreadsheet')
 const { JWT }               = require('google-auth-library');
