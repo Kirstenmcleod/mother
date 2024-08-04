@@ -33,10 +33,6 @@ app.use(cookieSession({
     maxAge: 30 * 60 * 1000
 }));
 
-const promisify = require('util').promisify;
-const readdirp = promisify(fs.readdir);
-const statp = promisify(fs.stat);
-
 app.use(async function(req, res, next) {
     console.log('__dirname',__dirname)
     console.log(`app - ${req.method} - ${req.url}`);
@@ -47,8 +43,8 @@ app.use(async function(req, res, next) {
 
 
 app.get(['/','/index.html','/index'], (req, res) => {
-    res.sendFile('public/index.html');
-});
+    res.sendFile(path.join(__dirname,`/public/index.html`));
+})
 
 app.get('/ajax/locations', locations.get);
 
