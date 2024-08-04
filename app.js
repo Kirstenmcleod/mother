@@ -42,12 +42,17 @@ async function scan(directoryName = '.', results = []) {
     let files = await readdirp(directoryName);
     console.log('files',JSON.stringify(files));
     for (let f of files) {
-        if(directoryName.indexOf("node_modules") != -1) continue;
+        if(directoryName.indexOf("node_modules") != -1){
+            console.log('skipping node_modules')
+            continue;
+        }
         let fullPath = path.join(directoryName, f);
         let stat = await statp(fullPath);
         if (stat.isDirectory()) {
+            console.log('Directory',fullPath)
             await scan(fullPath, results);
         } else {
+            console.log('File',fullPath)
             results.push(fullPath);
         }
     }
@@ -57,9 +62,11 @@ async function scan(directoryName = '.', results = []) {
 app.use(async function(req, res, next) {
     console.log('__dirname',__dirname)
     console.log(`app - ${req.method} - ${req.url}`);
+    await secrets.init();
 
     scan().then((data) => {
-        console.log('scan',data)
+        console.log('scan',data);
+        next();
       })
         .catch((e) => {
           console.error('scan error',e.message);
@@ -67,12 +74,7 @@ app.use(async function(req, res, next) {
         })
 
     // Ensure secrets from SSM are cached in Global scope
-    await secrets.init();
 
-    console.log('secrets initialised')
-
-    // Handover processing to the next eligible route
-    next();
 });
 
 
