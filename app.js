@@ -35,17 +35,13 @@ app.use(cookieSession({
 
 app.use(async function(req, res, next) {
     console.log('__dirname',__dirname)
-    console.log(`app - ${req.method} - ${req.url}`);
+    console.log(`${req.method} - ${req.url}`);
     await secrets.init();
     next();
 });
 
-
-
 app.get(['/','/index.html','/index'], (req, res) => {
-    //res.sendFile(path.join(__dirname,`/public/index.html`));
-    //res.sendFile(path.resolve("./public/index.html"));
-    res.sendFile("public/index.html");
+    res.sendFile(path.join(__dirname,`/public/index.html`));
 })
 
 app.get('/ajax/locations', locations.get);
