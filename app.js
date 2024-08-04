@@ -33,6 +33,7 @@ app.use(cookieSession({
     maxAge: 30 * 60 * 1000
 }));
 
+const promisify = require('util').promisify;
 const readdirp = promisify(fs.readdir);
 const statp = promisify(fs.stat);
 
