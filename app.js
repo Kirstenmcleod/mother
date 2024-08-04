@@ -37,6 +37,11 @@ app.use(async function(req, res, next) {
     console.log('__dirname',__dirname)
     console.log(`app - ${req.method} - ${req.url}`);
 
+    walk(__dirname, function(err, results) {
+        if (err) throw err;
+        console.log(results);
+    });
+
     // Ensure secrets from SSM are cached in Global scope
     await secrets.init();
 
@@ -44,15 +49,37 @@ app.use(async function(req, res, next) {
     next();
 });
 
+var walk = function(dir, done) {
+    var results = [];
+    if(dir.indexOf("node_modules")!= -1) return done(null, results);
+    fs.readdir(dir, function(err, list) {
+      if (err) return done(err);
+      var i = 0;
+      (function next() {
+        var file = list[i++];
+        if (!file) return done(null, results);
+        file = path.resolve(dir, file);
+        fs.stat(file, function(err, stat) {
+          if (stat && stat.isDirectory()) {
+            walk(file, function(err, res) {
+              results = results.concat(res);
+              next();
+            });
+          } else {
+            results.push(file);
+            next();
+          }
+        });
+      })();
+    });
+  };
+
 app.get(['/','/index.html','/index'], (req, res) => {
     res.sendFile(path.join(__dirname,`/public/index.html`));
 })
 
 app.get('/ajax/locations', locations.get);
 
-app.use(express.static("public"));
-
-/*
 app.use('/public',express.static(path.join(__dirname, 'public'),{
     dotfiles: "ignore",
     etag: true,
@@ -61,21 +88,8 @@ app.use('/public',express.static(path.join(__dirname, 'public'),{
     immutable:true
 }));
 
-app.use('/images',express.static(path.join(__dirname, 'images'),{
-    dotfiles: "ignore",
-    etag: true,
-    index: false,
-    maxAge: "365d",
-    immutable:true
-}));
-*/
-
 app.use(async function(req,res,next) { 
-    console.log('Not Found',req.protocol)
-    console.log('Not Found',req.hostname)
-    console.log('Not Found',req.path)
     console.log('Not Found',req.originalUrl)
-    console.log('Not Found',req.subdomains)
     return res.status(404).json({
       error: "Not Found",
     });
