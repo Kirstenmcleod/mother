@@ -6,9 +6,9 @@ const locations     = require('./ajax/locations');
 const secrets       = require('./lib/secrets');
 
 // Developer environment settings
-require('dotenv').config();
 
 // Configure Express
+app.set('case sensitive routing', true);
 app.use(async function(req, res, next) {
     console.log('__dirname',__dirname)
     console.log(`${req.method} - ${req.url}`);
@@ -17,7 +17,7 @@ app.use(async function(req, res, next) {
 });
 
 app.get(['/','/index.html','/index'], (req, res) => {
-    res.sendFile(path.join(__dirname,`/public/index.html`));
+    res.sendFile(path.join(__dirname,`/public/Index.html`));
 })
 
 app.get('/ajax/locations', locations.get);
