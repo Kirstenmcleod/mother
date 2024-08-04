@@ -4,8 +4,6 @@ const { JWT }               = require('google-auth-library');
 const secrets               = require('../lib/secrets');
 
 exports.get = async function(req, res) {
-    await secrets.init();
-
     let clientEmail = await secrets.get("client_email");
     let privateKey = await secrets.get("private_key");
     const serviceAccountAuth = new JWT({
