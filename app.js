@@ -50,6 +50,9 @@ app.get(['/','/index.html','/index'], (req, res) => {
 
 app.get('/ajax/locations', locations.get);
 
+app.use(express.static("public"));
+
+/*
 app.use('/public',express.static(path.join(__dirname, 'public'),{
     dotfiles: "ignore",
     etag: true,
@@ -65,6 +68,7 @@ app.use('/images',express.static(path.join(__dirname, 'images'),{
     maxAge: "365d",
     immutable:true
 }));
+*/
 
 app.use(async function(req,res,next) { 
     console.log('Not Found',req.protocol)
