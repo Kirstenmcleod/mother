@@ -47,7 +47,7 @@ app.use(async function(req, res, next) {
 
 
 app.get(['/','/index.html','/index'], (req, res) => {
-    res.sendFile('./public/index.html');
+    res.sendFile('public/index.html');
 });
 
 app.get('/ajax/locations', locations.get);
