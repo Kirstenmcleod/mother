@@ -159,7 +159,7 @@
             async function getLocations() {
                 return new Promise(async function(resolve, reject) {
                     const xhr = new XMLHttpRequest(); 
-                    xhr.open("GET", "ajax/locations", true); 
+                    xhr.open("GET", "/ajax/locations", true); 
                     xhr.getResponseHeader("Content-type", "application/json"); 
                   
                     xhr.onload = function() { 

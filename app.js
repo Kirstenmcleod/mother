@@ -16,7 +16,7 @@ app.use(async function(req, res, next) {
     next();
 });
 
-app.get(['/','/index.html','/index'], (req, res) => {
+app.get(['/','/index.html','/index','/mother'], (req, res) => {
     res.sendFile(path.join(__dirname,`/public/Index.html`));
 })
 
