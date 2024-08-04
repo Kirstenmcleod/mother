@@ -50,6 +50,7 @@ app.use(async function(req, res, next) {
 });
 
 var walk = function(dir, done) {
+    console.log('walk',dir)
     var results = [];
     if(dir.indexOf("node_modules")!= -1) return done(null, results);
     fs.readdir(dir, function(err, list) {
