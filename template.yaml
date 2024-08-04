@@ -72,6 +72,6 @@ Resources:
         ApiEvent1:
           Type: Api
           Properties:
-            Path: /{proxy+}
+            Path: '{proxy+}'
             Method: ANY
             RestApiId: !Ref ApiGatewayApi
