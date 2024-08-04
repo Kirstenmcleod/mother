@@ -37,7 +37,7 @@ app.use(async function(req, res, next) {
     console.log('__dirname',__dirname)
     console.log(`app - ${req.method} - ${req.url}`);
 
-    walk(__dirname, function(err, results) {
+    walk('.', function(err, results) {
         if (err) throw err;
         console.log(results);
     });
