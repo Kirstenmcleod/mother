@@ -2,10 +2,6 @@
   "name": "mother",
   "version": "1.0.0",
   "description": "Major project",
-  "main": "app.js",
-  "engines": {
-    "node": ">=16.0.0"
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "app.js"
@@ -26,7 +22,6 @@
     "serverless-http": "^2.7.0"
   },
   "devDependencies": {
-    "aws-sdk": "^2.1664.0",
-    "serverless": "^3.39.0"
+    "aws-sdk": "^2.1664.0"
   }
 }
