@@ -33,14 +33,29 @@ app.use(cookieSession({
     maxAge: 30 * 60 * 1000
 }));
 
+const readdirp = promisify(fs.readdir);
+const statp = promisify(fs.stat);
+
+async function scan(directoryName = '.', results = []) {
+    let files = await readdirp(directoryName);
+    for (let f of files) {
+        if(directoryName.indexOf("node_modules") != -1) continue;
+        let fullPath = path.join(directoryName, f);
+        let stat = await statp(fullPath);
+        if (stat.isDirectory()) {
+            await scan(fullPath, results);
+        } else {
+            results.push(fullPath);
+        }
+    }
+    return results;
+}
+
 app.use(async function(req, res, next) {
     console.log('__dirname',__dirname)
     console.log(`app - ${req.method} - ${req.url}`);
 
-    walk('.', function(err, results) {
-        if (err) throw err;
-        console.log(results);
-    });
+    scan().then(data => console.log('dir',data)).catch(next);
 
     // Ensure secrets from SSM are cached in Global scope
     await secrets.init();
@@ -49,31 +64,7 @@ app.use(async function(req, res, next) {
     next();
 });
 
-var walk = function(dir, done) {
-    console.log('walk',dir)
-    var results = [];
-    if(dir.indexOf("node_modules")!= -1) return done(null, results);
-    fs.readdir(dir, function(err, list) {
-      if (err) return done(err);
-      var i = 0;
-      (function next() {
-        var file = list[i++];
-        if (!file) return done(null, results);
-        file = path.resolve(dir, file);
-        fs.stat(file, function(err, stat) {
-          if (stat && stat.isDirectory()) {
-            walk(file, function(err, res) {
-              results = results.concat(res);
-              next();
-            });
-          } else {
-            results.push(file);
-            next();
-          }
-        });
-      })();
-    });
-  };
+
 
 app.get(['/','/index.html','/index'], (req, res) => {
     res.sendFile(path.join(__dirname,`/public/index.html`));
