@@ -38,7 +38,9 @@ const readdirp = promisify(fs.readdir);
 const statp = promisify(fs.stat);
 
 async function scan(directoryName = '.', results = []) {
+    console.log('scanning', directoryName)
     let files = await readdirp(directoryName);
+    console.log('files',JSON.stringify(files));
     for (let f of files) {
         if(directoryName.indexOf("node_modules") != -1) continue;
         let fullPath = path.join(directoryName, f);
@@ -56,10 +58,18 @@ app.use(async function(req, res, next) {
     console.log('__dirname',__dirname)
     console.log(`app - ${req.method} - ${req.url}`);
 
-    scan().then(data => console.log('dir',data)).catch(next);
+    scan().then((data) => {
+        console.log('scan',data)
+      })
+        .catch((e) => {
+          console.error('scan error',e.message);
+          next();
+        })
 
     // Ensure secrets from SSM are cached in Global scope
     await secrets.init();
+
+    console.log('secrets initialised')
 
     // Handover processing to the next eligible route
     next();
