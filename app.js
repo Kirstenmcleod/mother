@@ -8,9 +8,7 @@ const secrets       = require('./lib/secrets');
 // Developer environment settings
 
 // Configure Express
-app.set('case sensitive routing', true);
 app.use(async function(req, res, next) {
-    console.log('__dirname',__dirname)
     console.log(`${req.method} - ${req.url}`);
     await secrets.init();
     next();

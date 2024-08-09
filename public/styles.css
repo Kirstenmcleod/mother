@@ -7,7 +7,7 @@ body {
   display: flex;
 }
 .fixed-tile {
-  width: 40vh; /* Adjust width as needed */
+  width: 40vw; /* Adjust width as needed */
   height: 100%; /* Takes full height of the viewport */
   position: fixed;
   left: 0;
@@ -17,7 +17,7 @@ body {
   overflow-y: auto; /* Enable scrolling if content exceeds height */
 }
 .content {
-  margin-left: 40vh; /* Should match fixed-tile width */
+  margin-left: 40vw; /* Should match fixed-tile width */
 }
 /* Just for styling content area */
 .content p {
@@ -211,3 +211,28 @@ body {
       position: relative;
     }
 
+/* Sizzle Reel */
+.sticky-container {
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 1000;
+    width: 100%;
+}
+
+.sticky-container video {
+    width: 100%;
+}
+
+
+/*
+.sizzle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  min-height: 100%;
+  z-index:-100;
+}
+*/

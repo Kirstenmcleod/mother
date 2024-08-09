@@ -9,9 +9,15 @@
         <title>mother</title>
     </head>
     <body>
+        <div class="sticky-container" id="stickyContainer">
+        <video controls>
+            <source src="your-video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        </div>
         <div class="container">
             <div class="fixed-tile">
-                <div id="map" class="" uk-sticky="end: true"></div>
+                <div id="map" class=""></div>
             </div>
             <div id="content" class="content"></div>
         </div>
@@ -37,13 +43,27 @@
                 {lat:-32.056069337737895,lng:151.6622943328867},
                 {lat:-31.88423648651268,lng:152.6542647065874},
             ];
+
+            window.addEventListener('scroll', function() {
+                const stickyContainer = document.getElementById('stickyContainer');
+                const stickyHeight = stickyContainer.offsetHeight;
+                const scrollPosition = window.scrollY;
             
+                if (scrollPosition >= window.innerHeight*4) {
+                    stickyContainer.style.position = 'relative';
+                } else {
+                    stickyContainer.style.position = 'sticky';
+                }
+            });
+
 
             document.addEventListener("DOMContentLoaded", () => {    
                 
                 let locationsTask = getLocations();
-                locationsTask.then(function(data) {
+                locationsTask.then(async function(data) {
                     locations = data;
+
+                    await loadImages();
 
                     var featuredLocation = 'initiated';
                     var isFeaturedLocation = false;
@@ -144,7 +164,7 @@
 
                     observer = new IntersectionObserver(function(entries, observer) {
                         entries.forEach((entry)=>{
-                            console.log(entry.target.id, (entry.isIntersecting) ? 'entering' : 'exiting');
+                            //console.log(entry.target.id, (entry.isIntersecting) ? 'entering' : 'exiting');
                         });
                     });
 
@@ -170,6 +190,24 @@
                 });
             }
 
+
+            async function loadImages() {
+
+              console.log("Loading all images");
+              const promises = locations.map((location) => {
+                return new Promise((resolve) => {
+                  var img = new Image();
+                  img.src = `${location['Dropbox Link']}&raw=1`;
+                  img.onload = () => resolve();
+                  img.onerror = () => resolve();
+                });
+              });
+            
+              return Promise.all(promises).then(() => {
+                console.log("All Done");
+              });
+            }
+
             async function initMap() {
                 const {Map} = await google.maps.importLibrary("maps");
                 const {AdvancedMarkerElement} = await google.maps.importLibrary("marker");
@@ -183,9 +221,9 @@
                         lat: -34.00,
                         lng: 150.000
                     },
-                    zoom: 7,
-                    minZoom: 7,
-                    maxZoom: 7,
+                    zoom: 8,
+                    minZoom: 8,
+                    maxZoom: 8,
                     mapTypeControl: false,
                     mapTypeControlOptions: {},
                     scrollwheel: false,
@@ -201,14 +239,12 @@
 
                 directionsService = new google.maps.DirectionsService();
                 directionsRenderer.setMap(map);
-                
-                
             }
 
             function moveMarker(id) {
                 for (const location of locations) {
                     if(location.ID==id){
-                        console.log(location);
+                        //console.log(location);
                         marker.position = new google.maps.LatLng(parseFloat(location.latitude),parseFloat(location.longitude));
                         //marker.setPosition(new google.maps.LatLng(parseFloat(location.latitude),parseFloat(location.longitude)));
                         //marker.setZIndex(9999)
@@ -217,6 +253,8 @@
                     }
                 }          
             };
+
+            
         </script>
         <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUtmgcZH2SX6ZmqbzWtZv8Qz19hqyVkQA&callback=initMap"></script>
     </body>
