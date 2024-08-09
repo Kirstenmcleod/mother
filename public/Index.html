@@ -9,8 +9,13 @@
         <title>mother</title>
     </head>
     <body>
+        <audio id="audio">
+          <source src="https://mother-content.s3.ap-southeast-2.amazonaws.com/mother.mp3" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+        
         <div class="sticky-container" id="stickyContainer">
-        <video muted loop autoplay>
+        <video muted loop autoplay id="sizzle">
             <source src="https://mother-content.s3.ap-southeast-2.amazonaws.com/mother.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
@@ -56,9 +61,13 @@
                 }
             });
 
+            document.getElementById("sizzle").addEventListener("click", function() {
+              let audio = document.getElementById('audio');
+                audio.play();
+            });
+
 
             document.addEventListener("DOMContentLoaded", () => {    
-                
                 let locationsTask = getLocations();
                 locationsTask.then(async function(data) {
                     locations = data;
